@@ -3,11 +3,10 @@ import { motion } from 'framer-motion';
 import { MapPin, Bed, Bath, Maximize, ArrowRight, Star, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const PREMIUM_IMG = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/e1f179b93_generated_e6dc0c25.png';
-const PREMIUM_INT = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/a22959e3d_generated_137f3c1f.png';
-const KILIMANI = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/52d844b99_generated_7840f324.png';
-const KAREN = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/d0294d997_generated_f3858d74.png';
-
+const PREMIUM_IMG = 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80';
+const PREMIUM_INT = 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80';
+const KILIMANI = 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80';
+const KAREN = 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80';
 const properties = [
   {
     id: 1,

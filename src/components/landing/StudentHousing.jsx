@@ -4,10 +4,9 @@ import { MapPin, Clock, Wifi, Shield, Star, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-const STUDENT_ROOM = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/0f01ad439_generated_b27c8860.png';
-const COLIVING = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/da27e562c_generated_a5acfccf.png';
-const KILIMANI = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/52d844b99_generated_7840f324.png';
-
+const STUDENT_ROOM = 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80';
+const COLIVING = 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80';
+const KILIMANI = 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80';
 const listings = [
   {
     id: 1,

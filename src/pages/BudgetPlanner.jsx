@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, DollarSign, Sparkles, TrendingDown, TrendingUp, Lightbulb, Target, PiggyBank, Bus, Zap, Wifi, ShoppingCart, BookOpen, Coffee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { base44 } from '@/api/base44Client';
+//No importing base44 here since this component is used in the landing page before users are authenticated
 import AffordabilityScore from '@/components/budget/AffordabilityScore';
 import CostBreakdown from '@/components/budget/CostBreakdown';
 import SavingsTips from '@/components/budget/SavingsTips';
@@ -59,8 +59,16 @@ export default function BudgetPlanner() {
 
   const fetchAITips = async () => {
     setLoadingAI(true);
-    const result = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are a financial advisor for university students in Nairobi, Kenya.
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1000,
+          messages: [{
+            role: 'user',
+            content: `You are a financial advisor for university students in Nairobi, Kenya.
       Student details:
       - University: ${form.university}
       - Living area: ${form.area}
@@ -70,29 +78,21 @@ export default function BudgetPlanner() {
       - Food: KES ${form.food}
       - Monthly surplus/deficit: KES ${surplus}
 
-      Provide 5 practical, specific money-saving tips for this student. Be very practical and Nairobi-specific. Focus on actionable advice.`,
-      response_json_schema: {
-        type: 'object',
-        properties: {
-          tips: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                title: { type: 'string' },
-                description: { type: 'string' },
-                potential_saving: { type: 'string' },
-                category: { type: 'string' }
-              }
-            }
-          },
-          summary: { type: 'string' }
-        }
-      }
-    });
-    setAiTips(result);
-    setLoadingAI(false);
-    setActiveSection('tips');
+      Provide 5 practical, specific money-saving tips for this student. Be very practical and Nairobi-specific. Focus on actionable advice.
+      
+      Respond only with a JSON object like: { "tips": [{ "title": "...", "description": "...", "potential_saving": "...", "category": "..." }], "summary": "..." }`
+          }]
+        })
+      });
+      const data = await res.json();
+      const result = JSON.parse(data.content[0].text);
+      setAiTips(result);
+      setActiveSection('tips');
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingAI(false);
+    }
   };
 
   const update = (key, val) => setForm(f => ({ ...f, [key]: val }));

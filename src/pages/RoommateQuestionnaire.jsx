@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Sparkles, CheckCircle2, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/api/base44Client';
 import StepIndicator from '@/components/roommate/StepIndicator';
 import Step1Personal from '@/components/roommate/Step1Personal';
 import Step2Budget from '@/components/roommate/Step2Budget';
@@ -51,7 +51,7 @@ export default function RoommateQuestionnaire() {
 
   const handleSubmit = async () => {
     setSubmitting(true);
-    await base44.entities.RoommateProfile.create({ ...formData, status: 'active' });
+    await supabase.from('RoommateProfiles').insert({ ...formData, status: 'active' });
     setSubmitted(true);
     setSubmitting(false);
   };

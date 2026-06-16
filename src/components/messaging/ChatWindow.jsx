@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, X, Shield, Sparkles, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/api/base44Client';
 
 function makeConvId(a, b) {
   return [a, b].sort().join('__');
@@ -24,21 +24,21 @@ export default function ChatWindow({ myProfile, otherProfile, matchScore, onClos
 
   useEffect(() => {
     async function loadMessages() {
-      const msgs = await base44.entities.Message.filter(
-        { conversation_id: convId },
-        'created_date',
-        100
-      );
-      setMessages(msgs);
+      const { data: msgs } = await supabase.from('messages')
+  .select('*')
+  .eq('conversation_id', convId)
+  .order('created_at', { ascending: true })
+  .limit(100);
+setMessages(msgs || []);
       setLoading(false);
     }
     loadMessages();
 
-    const unsub = base44.entities.Message.subscribe((event) => {
-      if (event.data?.conversation_id !== convId) return;
-      if (event.type === 'create') setMessages(prev => [...prev, event.data]);
-    });
-    return unsub;
+    const unsub = supabase.channel(`messages:${convId}`)
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `conversation_id=eq.${convId}` },
+    (payload) => setMessages(prev => [...prev, payload.new])
+  ).subscribe();
+return () => supabase.removeChannel(unsub);
   }, [convId]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function ChatWindow({ myProfile, otherProfile, matchScore, onClos
     if (!trimmed || sending) return;
     setSending(true);
     setText('');
-    await base44.entities.Message.create({
+    await supabase.from('messages').insert({
       conversation_id: convId,
       sender_id: myProfile.id,
       recipient_id: otherProfile.id,

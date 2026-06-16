@@ -3,9 +3,8 @@ import { motion } from 'framer-motion';
 import { Search, Sparkles, MapPin, GraduationCap, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const STUDENT_IMG = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/930621c43_generated_200eb13e.png';
-const PREMIUM_IMG = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/e1f179b93_generated_e6dc0c25.png';
-
+const STUDENT_IMG = 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80';
+const PREMIUM_IMG = 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80';
 export default function HeroSection() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('student');

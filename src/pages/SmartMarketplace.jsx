@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Building2, Sparkles, Upload, CheckCircle2, AlertCircle, Loader2, Tag, DollarSign, FileText, Camera, Zap } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
-
 const STEPS = ['Details', 'Photos', 'AI Review'];
 
 export default function SmartMarketplace() {
@@ -20,8 +18,15 @@ export default function SmartMarketplace() {
 
   const runAIReview = async () => {
     setLoading(true);
-    const result = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an AI listing optimization assistant for a premium Nairobi student housing platform called Maelon Realty.
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 1000,
+    messages: [{
+      role: 'user',
+      content: `You are an AI listing optimization assistant for a premium Nairobi student housing platform called Maelon Realty.
 
 Analyze this property listing and provide improvements:
 
@@ -35,22 +40,14 @@ Property Details:
 - Description draft: ${form.description || 'None provided'}
 - Condition: ${form.condition}
 
-Provide: optimized title, compelling description, smart tags, suggested price range based on Nairobi market, quality score (0-100), and list any missing info that would improve the listing.`,
-      response_json_schema: {
-        type: 'object',
-        properties: {
-          optimized_title: { type: 'string' },
-          ai_description: { type: 'string' },
-          tags: { type: 'array', items: { type: 'string' } },
-          suggested_price_min: { type: 'number' },
-          suggested_price_max: { type: 'number' },
-          listing_quality_score: { type: 'number' },
-          missing_info: { type: 'array', items: { type: 'string' } },
-          strengths: { type: 'array', items: { type: 'string' } },
-          improvements: { type: 'array', items: { type: 'string' } },
-        }
-      }
-    });
+Provide: optimized title, compelling description, smart tags, suggested price range based on Nairobi market, quality score (0-100), and list any missing info that would improve the listing.
+
+Respond only with JSON: { "optimized_title": "...", "description": "...", "tags": ["..."], "price_range": "...", "quality_score": 85, "missing_info": ["..."] }`
+    }]
+  })
+});
+const data = await res.json();
+const result = JSON.parse(data.content[0].text);
     setAiResult(result);
     setLoading(false);
   };

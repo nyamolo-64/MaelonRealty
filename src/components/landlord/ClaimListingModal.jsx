@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Building2, Upload, CheckCircle2, MapPin, DollarSign, Phone, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/api/base44Client';
 import { useToast } from '@/components/ui/use-toast';
 
 const STEPS = ['Property Details', 'Photos & Media', 'Ownership Proof', 'Review'];
@@ -25,7 +25,7 @@ export default function ClaimListingModal({ onClose }) {
 
   const handleSubmit = async () => {
     setLoading(true);
-    await base44.entities.PropertyListing.create({
+    await supabase.from('PropertyListings').insert({
       ...form, rent: Number(form.rent), claimed: true, verification_status: 'pending',
     });
     setLoading(false);

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Users, Sparkles, Heart, AlertTriangle, MessageCircle, Loader2, CheckCircle2, Brain } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
 import ReactMarkdown from 'react-markdown';
 
 const PROFILES = [
@@ -41,8 +40,15 @@ export default function RoommateChemistry() {
   const analyze = async () => {
     setLoading(true);
     setAnalysis(null);
-    const result = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are a roommate compatibility psychologist specializing in student housing in Nairobi, Kenya.
+   const res = await fetch('https://api.anthropic.com/v1/messages', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 1000,
+    messages: [{
+      role: 'user',
+      content: `You are a roommate compatibility psychologist specializing in student housing in Nairobi, Kenya.
 
 Analyze the compatibility between these two students:
 
@@ -66,21 +72,13 @@ Analyze the compatibility between these two students:
 - Budget: ${p2.budget}
 - About: ${p2.about}
 
-Provide a deep, honest compatibility analysis. Be specific.`,
-      response_json_schema: {
-        type: 'object',
-        properties: {
-          success_score: { type: 'number', description: '0-100 roommate success probability' },
-          verdict: { type: 'string', description: 'One-line verdict' },
-          why_compatible: { type: 'array', items: { type: 'string' } },
-          potential_conflicts: { type: 'array', items: { type: 'string' } },
-          communication_tips: { type: 'array', items: { type: 'string' } },
-          shared_interests: { type: 'array', items: { type: 'string' } },
-          lifestyle_risks: { type: 'array', items: { type: 'string' } },
-          summary: { type: 'string' }
-        }
-      }
-    });
+Provide a deep, honest compatibility analysis. Be specific.
+Respond only with JSON: { "overall_score": 85, "verdict": "...", "strengths": ["..."], "challenges": ["..."], "tips": ["..."] }`
+    }]
+  })
+});
+const data = await res.json();
+const result = JSON.parse(data.content[0].text);
     setAnalysis(result);
     setLoading(false);
   };

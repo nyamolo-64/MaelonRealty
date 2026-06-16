@@ -2,11 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, Users, Shield, ArrowRight } from 'lucide-react';
 
-const KILIMANI = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/52d844b99_generated_7840f324.png';
-const KAREN = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/d0294d997_generated_f3858d74.png';
-const SKYLINE = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/6ee7714f9_generated_9f9514df.png';
-const COLIVING = 'https://media.base44.com/images/public/6a208ffc3f21e5ca2464ddd2/da27e562c_generated_a5acfccf.png';
-
+const KILIMANI = 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80';
+const KAREN = 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80';
+const SKYLINE = 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80';
+const COLIVING = 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80';
 const neighborhoods = [
   {
     name: 'Kilimani',

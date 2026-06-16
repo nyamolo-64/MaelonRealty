@@ -6,7 +6,7 @@ import {
   User, Mail, Phone, MessageCircle, ArrowLeft, Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/api/base44Client';
 import { useToast } from '@/components/ui/use-toast';
 
 const TIME_SLOTS = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
@@ -41,7 +41,7 @@ export default function BookViewing() {
 
   const handleSubmit = async () => {
     setLoading(true);
-    await base44.entities.ViewingRequest.create({
+    await supabase.from('ViewingRequests').insert({
       property_id: propertyId,
       property_title: propertyTitle,
       property_area: propertyArea,

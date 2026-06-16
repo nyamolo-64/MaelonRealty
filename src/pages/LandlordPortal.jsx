@@ -7,7 +7,7 @@ import {
   Home, MessageCircle, ChevronRight, Star, AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/api/base44Client';
 import ClaimListingModal from '@/components/landlord/ClaimListingModal';
 import ViewingSchedule from '@/components/landlord/ViewingSchedule';
 import ListingCard from '@/components/landlord/ListingCard';

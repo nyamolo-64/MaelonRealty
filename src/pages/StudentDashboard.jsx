@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/api/base44Client';
 import {
   Sparkles, Shield, MapPin, GraduationCap, DollarSign, Moon,
   Users, MessageCircle, Heart, LayoutDashboard, Settings, Home,
@@ -407,7 +407,7 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     async function load() {
-      const profiles = await base44.entities.RoommateProfile.list('-created_date', 50);
+      const { data: profiles } = await supabase.from('roommate_profiles').select('*').order('created_at', { ascending: false }).limit(50);
       if (profiles.length > 0) {
         const me = profiles[0];
         const others = profiles.slice(1);

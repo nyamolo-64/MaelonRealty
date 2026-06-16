@@ -6,7 +6,7 @@ import {
   Home, Bus, Loader2, MessageCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/api/base44Client';
 import SmartAssistant from '@/components/livingmatch/SmartAssistant';
 
 const CAMPUS_COMMUTE = {
@@ -85,7 +85,7 @@ export default function LivingMatchResults({ formData, onBack, onOpenAssistant }
 
   useEffect(() => {
     async function generate() {
-      const allProfiles = await base44.entities.RoommateProfile.list('-created_date', 40);
+      const { data: allProfiles } = await supabase.from('roommate_profiles').select('*').order('created_at', { ascending: false }).limit(40);
       setProfiles(allProfiles);
 
       // Build neighborhood ranking
@@ -119,34 +119,23 @@ Top neighborhoods by suitability: ${rankedNeighborhoods.slice(0, 3).map(n => n.n
 
 Generate a comprehensive living match analysis. Be specific to Nairobi student housing context.`;
 
-      const result = await base44.integrations.Core.InvokeLLM({
-        prompt,
-        response_json_schema: {
-          type: 'object',
-          properties: {
-            match_score: { type: 'number', description: 'Overall match score 0-100' },
-            roommate_compatibility: { type: 'number' },
-            budget_compatibility: { type: 'number' },
-            lifestyle_score: { type: 'number' },
-            campus_convenience: { type: 'number' },
-            top_neighborhood: { type: 'string' },
-            neighborhood_reason: { type: 'string' },
-            recommended_property_type: { type: 'string' },
-            estimated_rent_split: { type: 'number', description: 'Per roommate monthly KES' },
-            monthly_transport_cost: { type: 'number', description: 'KES' },
-            monthly_utilities: { type: 'number', description: 'KES' },
-            total_monthly_cost: { type: 'number', description: 'KES per person' },
-            affordability_score: { type: 'number' },
-            why_this_match: { type: 'array', items: { type: 'string' }, description: '4-5 reasons' },
-            lifestyle_insights: { type: 'array', items: { type: 'string' }, description: '3 personalized insights' },
-            smart_tips: { type: 'array', items: { type: 'string' }, description: '3 actionable tips for this student' },
-            area_description: { type: 'string', description: '2-sentence neighborhood summary' },
-          }
-        }
-      });
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 1000,
+    messages: [{ 
+      role: 'user', 
+      content: prompt + '\n\nRespond only with a valid JSON object containing these fields: match_score, roommate_compatibility, budget_compatibility, lifestyle_score, campus_convenience, top_neighborhood, neighborhood_reason, recommended_property_type, estimated_rent_split, monthly_transport_cost, monthly_utilities, total_monthly_cost, affordability_score, why_this_match (array), lifestyle_insights (array), smart_tips (array), area_description. No markdown, no explanation, just JSON.'
+    }]
+  })
+});
+const data = await response.json();
+const result = JSON.parse(data.content[0].text);
 
-      setAiResults({ ...result, rankedNeighborhoods });
-      setLoading(false);
+setAiResults({ ...result, rankedNeighborhoods });
+setLoading(false);
     }
     generate();
   }, [formData]);

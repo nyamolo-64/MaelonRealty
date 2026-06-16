@@ -1,0 +1,53 @@
+{
+  "name": "RevenueRecord",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "premium_listing",
+        "featured_listing",
+        "verification_fee",
+        "subscription",
+        "referral_commission",
+        "lead_fee",
+        "ambassador_payout"
+      ]
+    },
+    "amount": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "KES"
+    },
+    "description": {
+      "type": "string"
+    },
+    "property_id": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "refunded"
+      ],
+      "default": "completed"
+    },
+    "reference": {
+      "type": "string"
+    },
+    "month": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "amount"
+  ]
+}

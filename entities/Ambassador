@@ -1,0 +1,71 @@
+{
+  "name": "Ambassador",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "university": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "referral_code": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "suspended"
+      ],
+      "default": "pending"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "bronze",
+        "silver",
+        "gold",
+        "platinum"
+      ],
+      "default": "bronze"
+    },
+    "total_referrals": {
+      "type": "number",
+      "default": 0
+    },
+    "successful_referrals": {
+      "type": "number",
+      "default": 0
+    },
+    "total_earnings": {
+      "type": "number",
+      "default": 0
+    },
+    "pending_earnings": {
+      "type": "number",
+      "default": 0
+    },
+    "paid_earnings": {
+      "type": "number",
+      "default": 0
+    },
+    "bio": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "full_name",
+    "university",
+    "email"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Message",
+  "type": "object",
+  "properties": {
+    "conversation_id": {
+      "type": "string",
+      "description": "Unique ID for the conversation thread (sorted pair of profile IDs)"
+    },
+    "sender_id": {
+      "type": "string",
+      "description": "RoommateProfile ID of the sender"
+    },
+    "recipient_id": {
+      "type": "string",
+      "description": "RoommateProfile ID of the recipient"
+    },
+    "content": {
+      "type": "string",
+      "description": "Message text"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the recipient has read the message"
+    }
+  },
+  "required": [
+    "conversation_id",
+    "sender_id",
+    "recipient_id",
+    "content"
+  ]
+}

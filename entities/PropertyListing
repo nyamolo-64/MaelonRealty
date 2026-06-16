@@ -1,0 +1,109 @@
+{
+  "name": "PropertyListing",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "area": {
+      "type": "string"
+    },
+    "property_type": {
+      "type": "string",
+      "enum": [
+        "Single Room",
+        "Bedsitter",
+        "Studio",
+        "1 Bedroom",
+        "2 Bedroom",
+        "3 Bedroom",
+        "4+ Bedroom"
+      ]
+    },
+    "rent": {
+      "type": "number"
+    },
+    "landlord_name": {
+      "type": "string"
+    },
+    "landlord_phone": {
+      "type": "string"
+    },
+    "landlord_email": {
+      "type": "string"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "amenities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "claimed": {
+      "type": "boolean",
+      "default": false
+    },
+    "claimed_by_id": {
+      "type": "string"
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "under_review",
+        "verified",
+        "rejected",
+        "flagged"
+      ],
+      "default": "pending"
+    },
+    "trust_score": {
+      "type": "number",
+      "default": 0
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "premium": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "occupied",
+        "unlisted"
+      ],
+      "default": "available"
+    },
+    "views_count": {
+      "type": "number",
+      "default": 0
+    },
+    "university_proximity": {
+      "type": "string"
+    },
+    "maelon_score": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "title",
+    "area",
+    "rent"
+  ]
+}

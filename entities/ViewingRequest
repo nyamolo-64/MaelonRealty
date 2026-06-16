@@ -1,0 +1,65 @@
+{
+  "name": "ViewingRequest",
+  "type": "object",
+  "properties": {
+    "property_id": {
+      "type": "string"
+    },
+    "property_title": {
+      "type": "string"
+    },
+    "property_area": {
+      "type": "string"
+    },
+    "student_name": {
+      "type": "string"
+    },
+    "student_email": {
+      "type": "string"
+    },
+    "student_phone": {
+      "type": "string"
+    },
+    "preferred_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "preferred_time": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "rejected",
+        "completed",
+        "no_show"
+      ],
+      "default": "pending"
+    },
+    "landlord_note": {
+      "type": "string"
+    },
+    "confirmed_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "confirmed_time": {
+      "type": "string"
+    },
+    "reminder_sent": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "property_id",
+    "student_name",
+    "preferred_date",
+    "preferred_time"
+  ]
+}

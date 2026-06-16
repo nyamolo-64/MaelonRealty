@@ -1,0 +1,59 @@
+{
+  "name": "Referral",
+  "type": "object",
+  "properties": {
+    "referrer_id": {
+      "type": "string"
+    },
+    "referrer_name": {
+      "type": "string"
+    },
+    "referral_code": {
+      "type": "string"
+    },
+    "referred_name": {
+      "type": "string"
+    },
+    "referred_email": {
+      "type": "string"
+    },
+    "referred_type": {
+      "type": "string",
+      "enum": [
+        "student",
+        "landlord",
+        "tenant"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "signed_up",
+        "converted",
+        "rewarded"
+      ],
+      "default": "pending"
+    },
+    "reward_amount": {
+      "type": "number",
+      "default": 0
+    },
+    "reward_paid": {
+      "type": "boolean",
+      "default": false
+    },
+    "conversion_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "referrer_id",
+    "referral_code",
+    "referred_email"
+  ]
+}

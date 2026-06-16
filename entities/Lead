@@ -1,0 +1,90 @@
+{
+  "name": "Lead",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "university": {
+      "type": "string"
+    },
+    "budget_min": {
+      "type": "number"
+    },
+    "budget_max": {
+      "type": "number"
+    },
+    "area_preference": {
+      "type": "string"
+    },
+    "lead_type": {
+      "type": "string",
+      "enum": [
+        "student",
+        "landlord",
+        "agent",
+        "ambassador"
+      ],
+      "default": "student"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "website",
+        "referral",
+        "whatsapp",
+        "direct",
+        "ambassador",
+        "social"
+      ],
+      "default": "website"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "new",
+        "contacted",
+        "viewing_scheduled",
+        "viewing_done",
+        "negotiating",
+        "closed_won",
+        "closed_lost"
+      ],
+      "default": "new"
+    },
+    "assigned_to": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "property_interest": {
+      "type": "string"
+    },
+    "referral_code": {
+      "type": "string"
+    },
+    "deal_value": {
+      "type": "number"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium"
+    }
+  },
+  "required": [
+    "name",
+    "email"
+  ]
+}

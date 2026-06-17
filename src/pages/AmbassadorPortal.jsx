@@ -41,12 +41,12 @@ export default function AmbassadorPortal() {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
   const amb = MOCK_AMBASSADOR;
-  const tier = TIER_COLORS[amb.tier];
+  const tier = TIER_COLORS[amb.tier] || TIER_COLORS.gold;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(`https://maelon.co.ke/register?ref=${amb.referral_code}`);
     setCopied(true);
-    toast({ title: 'Referral link copied!' });
+    toast({ title: 'Referral link copied!', description: 'Your referral URL is ready to share.' });
     setTimeout(() => setCopied(false), 2500);
   };
 

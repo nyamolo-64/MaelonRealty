@@ -23,6 +23,20 @@ const TABS = [
   { id: 'notifications', label: 'Notifications', icon: Bell },
 ];
 
+/**
+ * @typedef {{
+ *   label: string;
+ *   value: string | number;
+ *   sub?: string;
+ *   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+ *   color?: string;
+ *   delay?: number;
+ * }} StatCardProps
+ */
+
+/**
+ * @param {StatCardProps} props
+ */
 function StatCard({ label, value, sub, icon: Icon, color, delay = 0 }) {
   return (
     <motion.div
@@ -121,7 +135,7 @@ export default function AdminCenter() {
     users: AdminUsers,
     revenue: AdminRevenue,
     notifications: AdminNotifications,
-  }[activeTab];
+  }[activeTab] || (() => <Overview stats={stats} />);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

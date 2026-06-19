@@ -51,7 +51,7 @@ export default function RoommateQuestionnaire() {
 
   const handleSubmit = async () => {
     setSubmitting(true);
-    await supabase.from('RoommateProfiles').insert({ ...formData, status: 'active' });
+    await supabase.from('roommate_profiles').insert({ ...formData, status: 'active' });
     setSubmitted(true);
     setSubmitting(false);
   };

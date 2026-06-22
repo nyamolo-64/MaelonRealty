@@ -10,6 +10,7 @@ import Step2Budget from '@/components/roommate/Step2Budget';
 import Step3Lifestyle from '@/components/roommate/Step3Lifestyle';
 import Step4Preferences from '@/components/roommate/Step4Preferences';
 import Step5Review from '@/components/roommate/Step5Review';
+import { useAuth } from '@/lib/AuthContext';
 
 const STEPS = [
   { label: 'Personal' },
@@ -28,6 +29,7 @@ function validateStep(step, data) {
 }
 
 export default function RoommateQuestionnaire() {
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -51,9 +53,23 @@ export default function RoommateQuestionnaire() {
 
   const handleSubmit = async () => {
     setSubmitting(true);
-    await supabase.from('roommate_profiles').insert({ ...formData, status: 'active' });
-    setSubmitted(true);
-    setSubmitting(false);
+    try {
+      const { error } = await supabase.from('roommate_profiles').insert({
+        ...formData,
+        user_id: user?.id,
+        status: 'active'
+      });
+      if (error) {
+        console.error('Insert error:', error);
+        setSubmitting(false);
+        return;
+      }
+      setSubmitted(true);
+    } catch (e) {
+      console.error('Submit failed:', e);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {

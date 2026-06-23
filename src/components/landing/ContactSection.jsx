@@ -15,6 +15,24 @@ export default function ContactSection() {
     message: '',
   });
 
+  const handleSubmit = () => {
+    const text = `Hi Maelon Realty! 👋
+
+*Name:* ${formData.name}
+*Email:* ${formData.email}
+*Phone:* ${formData.phone}
+*Interested in:* ${formData.interest}
+*Message:* ${formData.message}`;
+
+    const encoded = encodeURIComponent(text);
+    window.open(`https://wa.me/254714462319?text=${encoded}`, '_blank');
+  };
+
+  const handleSchedule = () => {
+    const text = encodeURIComponent(`Hi! I'd like to book a free consultation with Maelon Realty.`);
+    window.open(`https://wa.me/254714462319?text=${text}`, '_blank');
+  };
+
   return (
     <section id="contact" className="py-24 bg-mist relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,9 +69,9 @@ export default function ContactSection() {
 
             <div className="mt-10 space-y-6">
               {[
-                { icon: Phone, label: '+254 700 123 456', sub: 'Mon-Fri, 8am-6pm EAT' },
-                { icon: Mail, label: 'hello@maelonrealty.co.ke', sub: 'We reply within 2 hours' },
-                { icon: MapPin, label: 'Westlands, Nairobi', sub: 'The Atrium, 5th Floor' },
+                { icon: Phone, label: '+254 714462319', sub: 'Mon-Fri, 8am-6pm EAT' },
+                { icon: Mail, label: 'maelonrealty@gmail.com', sub: 'We reply within 2 hours' },
+                { icon: MapPin, label: 'Ole Sangale Road, Nairobi', sub: 'Near Strathmore University' },
               ].map((item) => (
                 <div key={item.label} className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl bg-brass/10 flex items-center justify-center flex-shrink-0">
@@ -67,7 +85,6 @@ export default function ContactSection() {
               ))}
             </div>
 
-            {/* Quick Booking */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -83,8 +100,11 @@ export default function ContactSection() {
                 Schedule a 30-minute virtual session with our property experts.
                 Get personalized recommendations based on your needs and budget.
               </p>
-              <Button className="mt-4 bg-brass hover:bg-brass-light text-navy font-semibold rounded-full group">
-                Schedule Now
+              <Button
+                onClick={handleSchedule}
+                className="mt-4 bg-brass hover:bg-brass-light text-navy font-semibold rounded-full group"
+              >
+                Schedule on WhatsApp
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </motion.div>
@@ -145,9 +165,12 @@ export default function ContactSection() {
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 className="rounded-xl min-h-[120px] resize-none"
               />
-              <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold h-12 rounded-xl group">
+              <Button
+                onClick={handleSubmit}
+                className="w-full bg-brass hover:bg-brass-light text-navy font-semibold h-12 rounded-xl group"
+              >
                 <Send className="w-4 h-4 mr-2" />
-                Send Message
+                Send via WhatsApp
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
               <p className="text-muted-foreground text-xs text-center">

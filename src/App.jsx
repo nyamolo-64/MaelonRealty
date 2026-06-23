@@ -36,7 +36,7 @@ import CampusIntelligence from '@/pages/CampusIntelligence';
 import MaelonNetwork from '@/pages/MaelonNetwork';
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin, profile } = useAuth();
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
@@ -73,7 +73,7 @@ const AuthenticatedApp = () => {
         <Route path="/living-match" element={<LivingMatch />} />
         <Route path="/intelligence" element={<LivingIntelligence />} />
         <Route path="/admin" element={<AdminCenter />} />
-        <Route path="/landlord" element={<LandlordPortal />} />
+        <Route path="/landlord" element={profile?.role === 'landlord' ? <LandlordPortal /> : <Navigate to="/" replace />} />
         <Route path="/referral" element={<ReferralProgram />} />
         <Route path="/ambassador" element={<AmbassadorPortal />} />
         <Route path="/book-viewing" element={<BookViewing />} />

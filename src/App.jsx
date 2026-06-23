@@ -36,9 +36,9 @@ import CampusIntelligence from '@/pages/CampusIntelligence';
 import MaelonNetwork from '@/pages/MaelonNetwork';
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin, profile } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin, profile, isAuthenticated } = useAuth();
 
-  if (isLoadingPublicSettings || isLoadingAuth) {
+if (isLoadingPublicSettings || isLoadingAuth || (isAuthenticated && !profile)) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-navy">
         <div className="flex flex-col items-center gap-4">

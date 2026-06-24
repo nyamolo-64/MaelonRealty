@@ -5,12 +5,35 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 const footerLinks = {
-  'Student Living': ['Find Housing', 'Roommate Matching', 'Campus Guides', 'Budget Calculator', 'Safety Tips'],
-  'Premium Properties': ['Sales', 'Rentals', 'New Developments', 'Investment Advisory', 'Property Valuation'],
-  'Company': ['About Maelon', 'Careers', 'Press', 'Blog', 'Partners'],
-  'Support': ['Help Center', 'Contact Us', 'Terms of Service', 'Privacy Policy', 'Sitemap'],
+  'Student Living': [
+    { name: 'Find Housing', href: '/student-housing' },
+    { name: 'Roommate Matching', href: '/roommates' },
+    { name: 'Campus Guides', href: '/campus-guides' },
+    { name: 'Budget Calculator', href: '/budget-calculator' },
+    { name: 'Safety Tips', href: '/safety' },
+  ],
+  'Premium Properties': [
+    { name: 'Sales', href: '/properties/sale' },
+    { name: 'Rentals', href: '/properties/rent' },
+    { name: 'New Developments', href: '/developments' },
+    { name: 'Investment Advisory', href: '/investment' },
+    { name: 'Property Valuation', href: '/valuation' },
+  ],
+  'Company': [
+    { name: 'About Maelon', href: '/about' },
+    { name: 'Careers', href: '/careers' },
+    { name: 'Press', href: '/press' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'Partners', href: '/partners' },
+  ],
+  'Support': [
+    { name: 'Help Center', href: '/help' },
+    { name: 'Contact Us', href: '/contact' },
+    { name: 'Terms of Service', href: '/terms' },
+    { name: 'Privacy Policy', href: '/privacy' },
+    { name: 'Sitemap', href: '/sitemap' },
+  ],
 };
-
 export default function Footer() {
   return (
     <footer className="bg-navy relative overflow-hidden pt-20 pb-8">
@@ -38,8 +61,7 @@ export default function Footer() {
           <div className="flex gap-3 w-full lg:w-auto">
             <Input
               placeholder="Your email address"
-              className="bg-white/5 border-white/10 text-white placeholder:text-white/30 rounded-full h-12 min-w-[240px]"
-            />
+              className="bg-white/5 border-white/10 text-white placeholder:text-white/30 rounded-full h-12 min-w-[240px]" type={undefined}            />
             <Button className="bg-brass hover:bg-brass-light text-navy font-semibold px-6 rounded-full h-12 flex-shrink-0">
               Subscribe
             </Button>
@@ -53,9 +75,10 @@ export default function Footer() {
               <h4 className="text-brass font-semibold text-sm tracking-wider uppercase mb-4">{category}</h4>
               <ul className="space-y-3">
                 {links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-white/40 hover:text-white text-sm transition-colors duration-300">
-                      {link}
+                  <li key={link.name}>
+                    <a href={link.href} 
+                    className="text-white/40 hover:text-white text-sm transition-colors duration-300">
+                      {link.name}
                     </a>
                   </li>
                 ))}

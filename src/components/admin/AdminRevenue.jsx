@@ -72,7 +72,7 @@ export default function AdminRevenue() {
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis dataKey="month" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
             <YAxis tickFormatter={v => `${(v/1000).toFixed(0)}K`} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip active={undefined} payload={undefined} label={undefined} />} />
             <Bar dataKey="premium" name="Premium Listings" stackId="a" fill="#C5A059" radius={[0,0,0,0]} />
             <Bar dataKey="featured" name="Featured" stackId="a" fill="#3b82f6" />
             <Bar dataKey="verification" name="Verification" stackId="a" fill="#10b981" />

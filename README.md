@@ -1,39 +1,39 @@
-**Welcome to your Base44 project** 
+# Maelon Realty 🏠
 
-**About**
+AI-powered student housing platform for Nairobi universities.
 
-View and Edit  your app on [Base44.com](http://Base44.com) 
+**Live:** [maelon-realty.vercel.app](https://maelon-realty.vercel.app)
 
-This project contains everything you need to run your app locally.
+## What it does
+- Roommate matching powered by AI compatibility analysis
+- Smart property listings for students around Nairobi universities
+- Budget planner with Nairobi-specific cost breakdowns
+- AI Concierge for housing queries
+- Landlord portal for verified property owners
+- Role-based access (student / landlord)
 
-**Edit the code in your local development environment**
+## Tech Stack
+- **Frontend:** React + Vite + Tailwind CSS
+- **Backend:** Supabase (auth + database)
+- **AI:** Anthropic Claude API
+- **Deployment:** Vercel + GitHub
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+## Universities Covered
+Strathmore University, University of Nairobi, USIU-Africa, Kenyatta University, JKUAT
 
-**Prerequisites:** 
+## Getting Started
 
-1. Clone the repository using the project's Git URL 
-2. Navigate to the project directory
-3. Install dependencies: `npm install`
-4. Create an `.env.local` file and set the right environment variables
+### Prerequisites
+- Node.js 18+
+- A Supabase project
+- An Anthropic API key
 
+### Installation
+```bash
+git clone https://github.com/nyamolo-64/MaelonRealty.git
+cd MaelonRealty
+npm install
 ```
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=your_backend_url
 
-e.g.
-VITE_BASE44_APP_ID=cbef744a8545c389ef439ea6
-VITE_BASE44_APP_BASE_URL=https://my-to-do-list-81bfaad7.base44.app
-```
-
-Run the app: `npm run dev`
-
-**Publish your changes**
-
-Open [Base44.com](http://Base44.com) and click on Publish.
-
-**Docs & Support**
-
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
-
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+### Environment Variables
+Create a `.env` file in the project root:

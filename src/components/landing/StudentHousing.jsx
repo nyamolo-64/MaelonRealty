@@ -30,14 +30,16 @@ export default function StudentHousing() {
 
   useEffect(() => {
     const fetchListings = async () => {
-      const { data } = await supabase
-        .from('property_listings')
-        .select('*')
-        .eq('verification_status', 'verified')
-        .limit(3);
-      setListings(data || []);
-      setLoading(false);
-    };
+  const { data, error } = await supabase
+    .from('property_listings')
+    .select('*')
+    .eq('verification_status', 'verified')
+    .limit(3);
+  console.log('Listings data:', data);
+  console.log('Listings error:', error);
+  setListings(data || []);
+  setLoading(false);
+};
     fetchListings();
   }, []);
 

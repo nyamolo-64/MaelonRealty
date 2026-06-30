@@ -7,6 +7,7 @@ import { supabase } from '@/api/base44Client';
 import AffordabilityScore from '@/components/budget/AffordabilityScore';
 import CostBreakdown from '@/components/budget/CostBreakdown';
 import SavingsTips from '@/components/budget/SavingsTips';
+import { safeJsonParse } from '@/lib/safeJsonParse';
 
 const UNIVERSITIES = [
   'Strathmore University', 'University of Nairobi', 'USIU-Africa',
@@ -79,8 +80,7 @@ export default function BudgetPlanner() {
       });
       if (error) throw error;
 
-      const cleanText = data.text.replace(/```json|```/g, '').trim();
-      const result = JSON.parse(cleanText);
+      const result = safeJsonParse(data.text, { tips: [], summary: '' });
       setAiTips(result);
       setActiveSection('tips');
     } catch (e) {

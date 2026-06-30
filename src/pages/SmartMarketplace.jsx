@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Building2, Sparkles, Upload, CheckCircle2, AlertCircle, Loader2, Tag, DollarSign, FileText, Camera, Zap } from 'lucide-react';
 import { supabase } from '@/api/base44Client';
 const STEPS = ['Details', 'Photos', 'AI Review'];
+import { safeJsonParse } from '@/lib/safeJsonParse';
 
 export default function SmartMarketplace() {
   const [step, setStep] = useState(0);
@@ -42,8 +43,7 @@ Respond only with JSON: { "optimized_title": "...", "description": "...", "tags"
         body: { prompt, max_tokens: 1000 }
       });
       if (error) throw error;
-      const cleanText = data.text.replace(/```json|```/g, '').trim();
-      const result = JSON.parse(cleanText);
+      const result = safeJsonParse(data.text, { optimized_title: '', description: '', tags: [], price_range: '', quality_score: 0, missing_info: [] });
       setAiResult(result);
     } catch (e) {
       console.error('Listing optimization failed:', e);

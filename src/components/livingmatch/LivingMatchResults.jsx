@@ -6,6 +6,7 @@ import {
   Home, Bus, Loader2, MessageCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { safeJsonParse } from '@/lib/safeJsonParse';
 import { supabase } from '@/api/base44Client';
 import SmartAssistant from '@/components/livingmatch/SmartAssistant';
 
@@ -129,8 +130,8 @@ Generate a comprehensive living match analysis. Be specific to Nairobi student h
 
   if (error) throw error;
 
-  const cleanText = data.text.replace(/```json|```/g, '').trim();
-  const result = JSON.parse(cleanText);
+  const result = safeJsonParse(data.text, {});
+setAiResults({ ...result, rankedNeighborhoods });
 
   setAiResults({ ...result, rankedNeighborhoods });
 } catch (e) {

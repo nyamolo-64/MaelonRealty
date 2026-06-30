@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '@/api/base44Client';
 import { ArrowLeft, Users, Sparkles, Heart, AlertTriangle, MessageCircle, Loader2, CheckCircle2, Brain } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { safeJsonParse } from '@/lib/safeJsonParse';
 
 const PROFILES = [
   {
@@ -73,8 +74,7 @@ Respond only with JSON: { "overall_score": 85, "verdict": "...", "strengths": ["
         body: { prompt, max_tokens: 1000 }
       });
       if (error) throw error;
-      const cleanText = data.text.replace(/```json|```/g, '').trim();
-      const result = JSON.parse(cleanText);
+      const result = safeJsonParse(data.text, { overall_score: 0, verdict: '', strengths: [], challenges: [], tips: [] });
       setAnalysis(result);
     } catch (e) {
       console.error('Roommate chemistry analysis failed:', e);

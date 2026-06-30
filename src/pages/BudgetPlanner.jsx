@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, DollarSign, Sparkles, TrendingDown, TrendingUp, Lightbulb, Target, PiggyBank, Bus, Zap, Wifi, ShoppingCart, BookOpen, Coffee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-//No importing base44 here since this component is used in the landing page before users are authenticated
+import { supabase } from '@/api/base44Client';
 import AffordabilityScore from '@/components/budget/AffordabilityScore';
 import CostBreakdown from '@/components/budget/CostBreakdown';
 import SavingsTips from '@/components/budget/SavingsTips';
@@ -60,15 +60,7 @@ export default function BudgetPlanner() {
   const fetchAITips = async () => {
     setLoadingAI(true);
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1000,
-          messages: [{
-            role: 'user',
-            content: `You are a financial advisor for university students in Nairobi, Kenya.
+      const prompt = `You are a financial advisor for university students in Nairobi, Kenya.
       Student details:
       - University: ${form.university}
       - Living area: ${form.area}
@@ -80,12 +72,15 @@ export default function BudgetPlanner() {
 
       Provide 5 practical, specific money-saving tips for this student. Be very practical and Nairobi-specific. Focus on actionable advice.
       
-      Respond only with a JSON object like: { "tips": [{ "title": "...", "description": "...", "potential_saving": "...", "category": "..." }], "summary": "..." }`
-          }]
-        })
+      Respond only with a JSON object like: { "tips": [{ "title": "...", "description": "...", "potential_saving": "...", "category": "..." }], "summary": "..." }`;
+
+      const { data, error } = await supabase.functions.invoke('dynamic-service', {
+        body: { prompt, max_tokens: 1000 }
       });
-      const data = await res.json();
-      const result = JSON.parse(data.content[0].text);
+      if (error) throw error;
+
+      const cleanText = data.text.replace(/```json|```/g, '').trim();
+      const result = JSON.parse(cleanText);
       setAiTips(result);
       setActiveSection('tips');
     } catch (e) {
@@ -94,7 +89,6 @@ export default function BudgetPlanner() {
       setLoadingAI(false);
     }
   };
-
   const update = (key, val) => setForm(f => ({ ...f, [key]: val }));
 
   return (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/api/base44Client';
 import { ArrowLeft, Users, Sparkles, Heart, AlertTriangle, MessageCircle, Loader2, CheckCircle2, Brain } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
@@ -40,15 +41,7 @@ export default function RoommateChemistry() {
   const analyze = async () => {
     setLoading(true);
     setAnalysis(null);
-   const res = await fetch('https://api.anthropic.com/v1/messages', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 1000,
-    messages: [{
-      role: 'user',
-      content: `You are a roommate compatibility psychologist specializing in student housing in Nairobi, Kenya.
+   const prompt = `You are a roommate compatibility psychologist specializing in student housing in Nairobi, Kenya.
 
 Analyze the compatibility between these two students:
 
@@ -73,16 +66,22 @@ Analyze the compatibility between these two students:
 - About: ${p2.about}
 
 Provide a deep, honest compatibility analysis. Be specific.
-Respond only with JSON: { "overall_score": 85, "verdict": "...", "strengths": ["..."], "challenges": ["..."], "tips": ["..."] }`
-    }]
-  })
-});
-const data = await res.json();
-const result = JSON.parse(data.content[0].text);
-    setAnalysis(result);
-    setLoading(false);
-  };
+Respond only with JSON: { "overall_score": 85, "verdict": "...", "strengths": ["..."], "challenges": ["..."], "tips": ["..."] }`;
 
+    try {
+      const { data, error } = await supabase.functions.invoke('dynamic-service', {
+        body: { prompt, max_tokens: 1000 }
+      });
+      if (error) throw error;
+      const cleanText = data.text.replace(/```json|```/g, '').trim();
+      const result = JSON.parse(cleanText);
+      setAnalysis(result);
+    } catch (e) {
+      console.error('Roommate chemistry analysis failed:', e);
+    } finally {
+      setLoading(false);
+    }
+    };
   return (
     <div className="min-h-screen bg-navy">
       <nav className="flex items-center gap-4 px-6 py-4 border-b border-white/8">

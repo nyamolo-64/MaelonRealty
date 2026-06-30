@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Send, Brain, Sparkles, MapPin, DollarSign, Users, Home, Loader2, Mic, Paperclip } from 'lucide-react';
-//No importing base44 here since this component is used in the landing page before users are authenticated
+import { supabase } from '@/api/base44Client';
 import ReactMarkdown from 'react-markdown';
 
 const QUICK_PROMPTS = [
@@ -50,22 +50,21 @@ export default function AIConcierge() {
       .map(m => `${m.role === 'user' ? 'User' : 'Maelon AI'}: ${m.content}`)
       .join('\n\n');
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 1000,
-    messages: [{ 
-      role: 'user', 
-      content: `${SYSTEM_PROMPT}\n\nConversation history:\n${history}\n\nMaelon AI:`
-    }]
-  })
-});
-const data = await res.json();
-const response = data.content[0].text;
-setMessages(prev => [...prev, { role: 'assistant', content: response }]);
-    setLoading(false);
+    try {
+  const { data, error } = await supabase.functions.invoke('dynamic-service', {
+    body: {
+      prompt: `${SYSTEM_PROMPT}\n\nConversation history:\n${history}\n\nMaelon AI:`,
+      max_tokens: 1000
+    }
+  });
+  if (error) throw error;
+  setMessages(prev => [...prev, { role: 'assistant', content: data.text }]);
+} catch (e) {
+      console.error('AI Concierge failed:', e);
+      setMessages(prev => [...prev, { role: 'assistant', content: "Sorry, I'm having trouble connecting right now. Please try again." }]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

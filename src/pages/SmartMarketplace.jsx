@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Building2, Sparkles, Upload, CheckCircle2, AlertCircle, Loader2, Tag, DollarSign, FileText, Camera, Zap } from 'lucide-react';
+import { supabase } from '@/api/base44Client';
 const STEPS = ['Details', 'Photos', 'AI Review'];
 
 export default function SmartMarketplace() {
@@ -18,15 +19,7 @@ export default function SmartMarketplace() {
 
   const runAIReview = async () => {
     setLoading(true);
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 1000,
-    messages: [{
-      role: 'user',
-      content: `You are an AI listing optimization assistant for a premium Nairobi student housing platform called Maelon Realty.
+    const prompt = `You are an AI listing optimization assistant for a premium Nairobi student housing platform called Maelon Realty.
 
 Analyze this property listing and provide improvements:
 
@@ -42,15 +35,22 @@ Property Details:
 
 Provide: optimized title, compelling description, smart tags, suggested price range based on Nairobi market, quality score (0-100), and list any missing info that would improve the listing.
 
-Respond only with JSON: { "optimized_title": "...", "description": "...", "tags": ["..."], "price_range": "...", "quality_score": 85, "missing_info": ["..."] }`
-    }]
-  })
-});
-const data = await res.json();
-const result = JSON.parse(data.content[0].text);
-    setAiResult(result);
-    setLoading(false);
-  };
+Respond only with JSON: { "optimized_title": "...", "description": "...", "tags": ["..."], "price_range": "...", "quality_score": 85, "missing_info": ["..."] }`;
+
+    try {
+      const { data, error } = await supabase.functions.invoke('dynamic-service', {
+        body: { prompt, max_tokens: 1000 }
+      });
+      if (error) throw error;
+      const cleanText = data.text.replace(/```json|```/g, '').trim();
+      const result = JSON.parse(cleanText);
+      setAiResult(result);
+    } catch (e) {
+      console.error('Listing optimization failed:', e);
+    } finally {
+      setLoading(false);
+    }
+    };
 
   const update = (k, v) => setForm(f => ({ ...f, [k]: v }));
 

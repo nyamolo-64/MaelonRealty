@@ -119,23 +119,26 @@ Top neighborhoods by suitability: ${rankedNeighborhoods.slice(0, 3).map(n => n.n
 
 Generate a comprehensive living match analysis. Be specific to Nairobi student housing context.`;
 
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 1000,
-    messages: [{ 
-      role: 'user', 
-      content: prompt + '\n\nRespond only with a valid JSON object containing these fields: match_score, roommate_compatibility, budget_compatibility, lifestyle_score, campus_convenience, top_neighborhood, neighborhood_reason, recommended_property_type, estimated_rent_split, monthly_transport_cost, monthly_utilities, total_monthly_cost, affordability_score, why_this_match (array), lifestyle_insights (array), smart_tips (array), area_description. No markdown, no explanation, just JSON.'
-    }]
-  })
-});
-const data = await response.json();
-const result = JSON.parse(data.content[0].text);
+      try {
+  const { data, error } = await supabase.functions.invoke('dynamic-service', {
+    body: {
+      prompt: prompt + '\n\nRespond only with a valid JSON object containing these fields: match_score, roommate_compatibility, budget_compatibility, lifestyle_score, campus_convenience, top_neighborhood, neighborhood_reason, recommended_property_type, estimated_rent_split, monthly_transport_cost, monthly_utilities, total_monthly_cost, affordability_score, why_this_match (array), lifestyle_insights (array), smart_tips (array), area_description. No markdown, no explanation, just JSON.',
+      max_tokens: 1000
+    }
+  });
 
-setAiResults({ ...result, rankedNeighborhoods });
-setLoading(false);
+  if (error) throw error;
+
+  const cleanText = data.text.replace(/```json|```/g, '').trim();
+  const result = JSON.parse(cleanText);
+
+  setAiResults({ ...result, rankedNeighborhoods });
+} catch (e) {
+  console.error('AI matching failed:', e);
+  setAiResults({ rankedNeighborhoods });
+} finally {
+  setLoading(false);
+}
     }
     generate();
   }, [formData]);

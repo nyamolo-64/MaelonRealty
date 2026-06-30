@@ -63,7 +63,8 @@ export default function SmartAssistant({ onClose }) {
         }
       });
       if (error) throw error;
-      setMessages(prev => [...prev, { role: 'assistant', content: data.text }]);
+console.log('Edge function response:', data);
+setMessages(prev => [...prev, { role: 'assistant', content: data.text || 'No response received' }]);
     } catch (e) {
       console.error('Smart Assistant failed:', e);
       setMessages(prev => [...prev, { role: 'assistant', content: "Sorry, I'm having trouble right now. Please try again." }]);
